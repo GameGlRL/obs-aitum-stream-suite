@@ -2182,13 +2182,16 @@ void OBSBasicSettings::LoadOutputLayout(obs_data_t *settings, QFormLayout *outpu
 
 bool OBSBasicSettings::UpdateVideoEncoderIndexCombo(QComboBox *videoEncoderIndex, obs_data_t *settings, obs_data_array_t *outputs)
 {
-	if (!videoEncoderIndex || !settings || !outputs)
+	if (!videoEncoderIndex || !settings)
 		return false;
 
 	videoEncoderIndex->clear();
 
 	auto output_video_encoder = obs_data_get_string(settings, "output_video_encoder");
 	if (output_video_encoder && output_video_encoder[0] != '\0') {
+		if (!outputs)
+			return false;
+
 		auto count = obs_data_array_count(outputs);
 		for (size_t i = 0; i < count; i++) {
 			auto output = obs_data_array_item(outputs, i);
